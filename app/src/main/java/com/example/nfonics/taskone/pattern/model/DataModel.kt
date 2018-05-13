@@ -3,7 +3,7 @@ package com.example.nfonics.taskone.pattern.model
 /**
  * Created by nfonics on 5/13/18.
  */
-data class DataModel(val products: List<Products>){
+data class DataModel(val products: MutableList<Products>){
 
 
     inner class Products(
@@ -11,7 +11,9 @@ data class DataModel(val products: List<Products>){
             val image: String,
             val actual_price: String,
             val regular_price: String,
-            val size: List<Size>
+            val sizes: List<Size>,
+            val on_sale: Boolean,
+            val discount_percentage: String
     )
 
     inner class Size(

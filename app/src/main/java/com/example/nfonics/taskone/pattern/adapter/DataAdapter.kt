@@ -10,16 +10,17 @@ import com.example.nfonics.taskone.pattern.model.DataModel
 import com.example.nfonics.taskone.pattern.presenter.Clicked
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_data.view.*
+import java.util.ArrayList
 
 /**
  * Created by nfonics on 5/13/18.
  */
-class DataAdapter(var items : DataModel?, val context: Context, val list : Clicked) : RecyclerView.Adapter<ViewHolder>() {
+class DataAdapter(var items : MutableList<DataModel.Products>?, val context: Context, val list : Clicked) : RecyclerView.Adapter<ViewHolder>() {
 
     // Gets the number of animals in the list
     override fun getItemCount(): Int {
         if (items != null) {
-            return items?.products?.size!!
+            return items?.size!!
         }
         return 0
     }
@@ -31,22 +32,35 @@ class DataAdapter(var items : DataModel?, val context: Context, val list : Click
 
     // Binds each animal in the ArrayList to a view
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.title?.text = items?.products?.get(position)?.name
-        holder?.price?.text = items?.products?.get(position)?.actual_price
+        holder?.title?.text = items?.get(position)?.name
+        holder?.price?.text = items?.get(position)?.actual_price
         holder?.prent?.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
-                list.selectedItem(items?.products?.get(position))
+                list.selectedItem(items?.get(position))
             }
 
         })
 
 
-        if(items?.products?.get(position)?.image?.trim()?.length != 0)
-            Picasso.get().load(items?.products?.get(position)?.image).into(holder?.image)
+        if(items?.get(position)?.image?.trim()?.length != 0)
+            Picasso.get().load(items?.get(position)?.image).into(holder?.image)
+        else
+            holder?.image?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_launcher_background))
     }
 
     fun reloadData(new_items: DataModel?){
+        items = new_items?.products
+        notifyDataSetChanged()
+    }
+
+    fun reloadDataSet(new_items: ArrayList<DataModel.Products>){
         items = new_items
+        notifyDataSetChanged()
+    }
+
+    fun loadFilter(lister: MutableList<DataModel.Products>){
+        items?.clear()
+        items = lister
         notifyDataSetChanged()
 
     }
